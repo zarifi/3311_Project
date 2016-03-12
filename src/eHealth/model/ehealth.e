@@ -22,6 +22,8 @@ feature {NONE} -- Initialization
 		do
 			create s.make_empty
 			i := 0
+			create {SORTED_TWO_WAY_LIST[PERSON]}physicians.make
+			create {SORTED_TWO_WAY_LIST[PERSON]}patients.make
 		end
 
 feature -- model attributes

@@ -20,7 +20,7 @@ feature -- constructor
 		do
 			id := a_id
 			name := a_name
-			type
+			create {EMPTY_TYPE}type.make
 		end
 
 feature --attribute

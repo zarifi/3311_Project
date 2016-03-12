@@ -13,10 +13,4 @@ feature
 	deferred
 	end
 
-feature
-	make_empty: PERSON_TYPE
-		do
-			Result := {}
-		end
-
 end

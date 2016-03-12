@@ -6,6 +6,8 @@ note
 
 deferred class
 	PERSON
+inherit
+	COMPARABLE
 
 feature
 
@@ -27,6 +29,12 @@ feature --attributes
 
 	type: PERSON_TYPE
 		deferred
+		end
+
+feature
+	is_less alias "<" (other: like Current): BOOLEAN
+		do
+			Result := id < other.id
 		end
 
 end

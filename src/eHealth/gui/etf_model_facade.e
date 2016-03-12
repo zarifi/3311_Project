@@ -11,7 +11,7 @@ create
 	make
 
 feature -- Queries
-	model: ETF_MODEL
+	model: EHEALTH
 
 	error: BOOLEAN
 

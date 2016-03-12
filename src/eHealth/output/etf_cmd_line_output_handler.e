@@ -30,7 +30,7 @@ feature {NONE} -- Initialization
 
 feature -- Queries
 
-	model : ETF_MODEL
+	model : EHEALTH
 
 	model_state : STRING
 			-- Return a string representation of current model state

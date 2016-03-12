@@ -25,5 +25,5 @@ feature {NONE}
 
 feature -- Attributes
 	-- may declare your own model state here
-	model : ETF_MODEL
+	model : EHEALTH
 end

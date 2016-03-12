@@ -6,11 +6,13 @@ note
 
 class
 	MEDICINE
+
 create
 	make
 
 feature {NONE}
-	make(a_prescription: PRESCRIPTION; a_medication: MEDICATION; a_dose: VALUE)
+
+	make (a_prescription: PRESCRIPTION; a_medication: MEDICATION; a_dose: VALUE)
 		do
 			prescription := a_prescription
 			medication := a_medication
@@ -18,8 +20,11 @@ feature {NONE}
 		end
 
 feature -- attributes
+
 	medication: MEDICATION
+
 	prescription: PRESCRIPTION
+
 	dose: VALUE
 
 end

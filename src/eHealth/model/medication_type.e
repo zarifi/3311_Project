@@ -6,12 +6,12 @@ note
 
 class
 	MEDICATION_TYPE
+
 create
-	make_pill,
-	make_liquid,
-	make_from_int
+	make_pill, make_liquid, make_from_int
 
 feature {NONE}
+
 	make_pill
 		do
 			type := 1
@@ -22,7 +22,7 @@ feature {NONE}
 			type := 2
 		end
 
-	make_from_int(int: INTEGER)
+	make_from_int (int: INTEGER)
 		require
 			valid_integer_value: int = 1 or int = 2
 		do
@@ -34,6 +34,7 @@ feature {NONE}
 		end
 
 feature -- attributes
+
 	type: INTEGER
 
 end

@@ -6,23 +6,25 @@ note
 
 class
 	PATIENT
-	inherit
-		PERSON
+
+inherit
+
+	PERSON
 
 create
 	make
 
 feature -- constructor
-	make(a_id:INTEGER; a_name:STRING)
-	do
-		id := a_id
-		name := a_name
-	end
+
+	make (a_id: INTEGER; a_name: STRING)
+		do
+			id := a_id
+			name := a_name
+			type
+		end
 
 feature --attribute
-type: INTEGER
-do
-	
-end
+
+	type: PERSON_TYPE
 
 end

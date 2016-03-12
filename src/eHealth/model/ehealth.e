@@ -5,7 +5,7 @@ note
 	revision: "$Revision$"
 
 class
-	ETF_MODEL
+	EHEALTH
 
 inherit
 	ANY
@@ -27,6 +27,8 @@ feature {NONE} -- Initialization
 feature -- model attributes
 	s : STRING
 	i : INTEGER
+	physicians: LIST[PERSON]
+	patients: LIST[PERSON]
 
 feature -- model operations
 	default_update

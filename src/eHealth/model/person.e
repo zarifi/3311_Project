@@ -11,14 +11,10 @@ inherit
 
 feature
 
-	make_physician (a_id: INTEGER; a_name: STRING; a_type: PERSON_TYPE): PERSON
+	make (a_id: INTEGER; a_name: STRING)
 		do
-			Result := create {PHYSICIAN}.make (a_id, a_name, a_type)
-		end
-
-	make_patient (a_id: INTEGER; a_name: STRING): PERSON
-		do
-			Result := create {PATIENT}.make (a_id, a_name)
+			name := a_name
+			id := a_id
 		end
 
 feature --attributes
@@ -28,6 +24,10 @@ feature --attributes
 	id: INTEGER
 
 	type: PERSON_TYPE
+		deferred
+		end
+
+	make_empty
 		deferred
 		end
 

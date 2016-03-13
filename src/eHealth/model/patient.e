@@ -12,14 +12,22 @@ inherit
 	PERSON
 
 create
-	make
+	make_patient,
+	make_empty
 
 feature -- constructor
 
-	make (a_id: INTEGER; a_name: STRING)
+	make_patient (a_id: INTEGER; a_name: STRING)
 		do
 			id := a_id
 			name := a_name
+			create {EMPTY_TYPE}type.make
+		end
+
+	make_empty
+		do
+			id := -1
+			create name.make_empty
 			create {EMPTY_TYPE}type.make
 		end
 

@@ -11,9 +11,9 @@ inherit
 		redefine add_medication end
 create
 	make
-feature -- command 
+feature -- command
 	add_medication(id: INTEGER_64 ; medicine: TUPLE[name: STRING; kind: INTEGER_64; low: VALUE; hi: VALUE])
-		require else 
+		require else
 			add_medication_precond(id, medicine)
     	do
 			-- perform some update on the model state

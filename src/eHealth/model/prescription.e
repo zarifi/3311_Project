@@ -6,7 +6,8 @@ note
 
 class
 	PRESCRIPTION
-
+inherit
+	COMPARABLE
 create
 	make
 
@@ -26,5 +27,11 @@ feature -- attributes
 	physician: PERSON
 
 	patient: PERSON
+
+feature
+	is_less alias "<" (other: like Current): BOOLEAN
+		do
+			Result := id < other.id
+		end
 
 end

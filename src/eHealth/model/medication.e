@@ -6,13 +6,15 @@ note
 
 class
 	MEDICATION
+inherit
+	COMPARABLE
 
 create
 	make
 
 feature {NONE}
 
-	make (a_id: INTEGER; a_name: STRING; a_type: MEDICATION_TYPE; a_low: INTEGER; a_high: INTEGER)
+	make (a_id: INTEGER; a_name: STRING; a_type: MEDICATION_TYPE; a_low: VALUE; a_high: VALUE)
 		do
 			id := a_id
 			name := a_name
@@ -29,8 +31,14 @@ feature -- attributes
 
 	type: MEDICATION_TYPE
 
-	low: INTEGER
+	low: VALUE
 
-	high: INTEGER
+	high: VALUE
+
+feature
+	is_less alias "<" (other: like Current): BOOLEAN
+		do
+			Result := id < other.id
+		end
 
 end

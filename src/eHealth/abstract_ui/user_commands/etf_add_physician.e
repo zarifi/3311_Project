@@ -6,18 +6,18 @@ note
 
 class
 	ETF_ADD_PHYSICIAN
-inherit 
+inherit
 	ETF_ADD_PHYSICIAN_INTERFACE
 		redefine add_physician end
 create
 	make
-feature -- command 
+feature -- command
 	add_physician(id: INTEGER_64 ; name: STRING ; kind: INTEGER_64)
-		require else 
+		require else
 			add_physician_precond(id, name, kind)
     	do
 			-- perform some update on the model state
-			model.default_update
+			model.add_physician (id, name, kind)
 			etf_cmd_container.on_change.notify ([Current])
     	end
 

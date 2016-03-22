@@ -20,4 +20,9 @@ feature {NONE}
 feature -- attributes
 	int_type: INTEGER
 
+	out: STRING
+		do
+			create Result.make_empty
+		end
+
 end

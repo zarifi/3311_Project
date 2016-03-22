@@ -6,15 +6,16 @@ note
 
 class
 	MEDICINE
+inherit
+	COMPARABLE
 
 create
 	make
 
 feature {NONE}
 
-	make (a_prescription: PRESCRIPTION; a_medication: MEDICATION; a_dose: VALUE)
+	make (a_medication: MEDICATION; a_dose: VALUE)
 		do
-			prescription := a_prescription
 			medication := a_medication
 			dose := a_dose
 		end
@@ -23,8 +24,12 @@ feature -- attributes
 
 	medication: MEDICATION
 
-	prescription: PRESCRIPTION
-
 	dose: VALUE
+
+feature
+	is_less alias "<" (other: like Current): BOOLEAN
+		do
+			Result := medication.id < other.medication.id
+		end
 
 end

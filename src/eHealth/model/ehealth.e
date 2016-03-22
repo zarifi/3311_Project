@@ -86,14 +86,41 @@ feature -- model operations
 			prescriptions.extend(create {PRESCRIPTION}.make (id.as_integer_32, get_physician_by_id (doctor.as_integer_32), get_patient_by_id (patient.as_integer_32)))
 		end
 
+	add_medicine(id: INTEGER_64 ; medicine: INTEGER_64 ; dose: VALUE)
+		do
+			across prescriptions as presc
+			loop
+				if presc.item.id = id then
+					across medications as meds
+					loop
+						if meds.item.id = medicine then
+							presc.item.add_medicine (create {MEDICINE}.make (meds.item, dose))
+						end
+					end
+				end
+			end
+		end
+
 feature -- queries
 	out : STRING
 		do
 			create Result.make_from_string ("  ")
-			Result.append ("System State: default model state ")
-			Result.append ("(")
-			Result.append (i.out)
-			Result.append (")")
+--			Result.append ("System State: default model state ")
+--			Result.append ("(")
+--			Result.append (i.out)
+--			Result.append (")")
+			Result.append ("physicians%N")
+			across physicians as p
+			loop
+				Result.append(p.item.out)
+				Result.append ("%N")
+			end
+			Result.append ("patients%N")
+			across patients as p
+			loop
+				Result.append(p.item.out)
+				Result.append ("%N")
+			end
 		end
 
 	get_physician_by_id(a_id: INTEGER): PERSON
@@ -136,6 +163,9 @@ feature -- queries
 			end
 		end
 
+invariant
+	no_physician_empty: across physicians as p all not p.item.is_empty end
+	no_patient_empty: across patients as p all not p.item.is_empty end
 end
 
 

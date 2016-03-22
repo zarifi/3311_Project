@@ -37,4 +37,15 @@ feature {NONE}
 feature -- attributes
 	int_type: INTEGER
 
+feature
+	out: STRING
+		do
+			create Result.make_empty
+			if int_type = 3 then
+				Result.append("gn")
+			else
+				Result.append("sp")
+			end
+		end
+
 end

@@ -1,0 +1,3 @@
+add_physician(1,"andrew",specialist)
+add_patient(4,"dora")
+add_patient(2,"jake")

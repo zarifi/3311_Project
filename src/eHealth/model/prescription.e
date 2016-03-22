@@ -18,6 +18,7 @@ feature {NONE}
 			id := a_id
 			physician := a_physician
 			patient := a_patient
+			create {SORTED_TWO_WAY_LIST[MEDICINE]}medicines.make
 		end
 
 feature -- attributes
@@ -28,10 +29,17 @@ feature -- attributes
 
 	patient: PERSON
 
+	medicines: LIST[MEDICINE]
+
 feature
 	is_less alias "<" (other: like Current): BOOLEAN
 		do
 			Result := id < other.id
+		end
+
+	add_medicine(medicine: MEDICINE)
+		do
+			medicines.extend (medicine)
 		end
 
 end

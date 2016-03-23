@@ -6,6 +6,11 @@ note
 
 class
 	MEDICATION_TYPE
+inherit
+	ANY
+	redefine
+		out
+	end
 
 create
 	make_pill, make_liquid, make_from_int
@@ -36,5 +41,15 @@ feature {NONE}
 feature -- attributes
 
 	type: INTEGER
+
+	out: STRING
+		do
+			create Result.make_empty
+			if type = 1 then
+				Result.append("pl")
+			else
+				Result.append("lq")
+			end
+		end
 
 end

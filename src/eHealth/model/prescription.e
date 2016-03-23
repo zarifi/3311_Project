@@ -8,6 +8,9 @@ class
 	PRESCRIPTION
 inherit
 	COMPARABLE
+redefine
+	out
+end
 create
 	make
 
@@ -40,6 +43,31 @@ feature
 	add_medicine(medicine: MEDICINE)
 		do
 			medicines.extend (medicine)
+		end
+
+	out: STRING
+		local
+			med_count: INTEGER
+		do
+			create Result.make_empty
+			Result.append(id.out)
+			Result.append ("->[")
+			Result.append (id.out)
+			Result.append (",")
+			Result.append (physician.id.out)
+			Result.append (",")
+			Result.append (patient.id.out)
+			Result.append (",(")
+			med_count := 0
+			across medicines as meds
+			loop
+				if med_count > 0 then
+					Result.append(",")
+				end
+				Result.append (meds.item.out)
+				med_count := med_count + 1
+			end
+			Result.append (") ]")
 		end
 
 end

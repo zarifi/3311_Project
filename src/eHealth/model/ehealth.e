@@ -109,16 +109,28 @@ feature -- queries
 --			Result.append ("(")
 --			Result.append (i.out)
 --			Result.append (")")
-			Result.append ("physicians%N")
+			Result.append ("Physicians:%N")
 			across physicians as p
 			loop
 				Result.append(p.item.out)
 				Result.append ("%N")
 			end
-			Result.append ("patients%N")
+			Result.append ("Patients:%N")
 			across patients as p
 			loop
 				Result.append(p.item.out)
+				Result.append ("%N")
+			end
+			Result.append ("Medications:%N")
+			across medications as m
+			loop
+				Result.append (m.item.out)
+				Result.append ("%N")
+			end
+			Result.append ("Prescriptions:%N")
+			across prescriptions as pr
+			loop
+				Result.append(pr.item.out)
 				Result.append ("%N")
 			end
 		end
@@ -140,6 +152,7 @@ feature -- queries
 					Result := physicians.item_for_iteration
 					found_flag := True
 				end
+				physicians.forth
 			end
 		end
 
@@ -160,6 +173,7 @@ feature -- queries
 					Result := patients.item_for_iteration
 					found_flag := True
 				end
+				patients.forth
 			end
 		end
 

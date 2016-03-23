@@ -6,7 +6,7 @@ note
 
 class
 	ETF_ADD_MEDICATION
-inherit 
+inherit
 	ETF_ADD_MEDICATION_INTERFACE
 		redefine add_medication end
 create
@@ -17,7 +17,7 @@ feature -- command
 			add_medication_precond(id, medicine)
     	do
 			-- perform some update on the model state
-			model.default_update
+			model.add_medication (id, medicine)
 			etf_cmd_container.on_change.notify ([Current])
     	end
 

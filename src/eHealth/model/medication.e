@@ -8,6 +8,9 @@ class
 	MEDICATION
 inherit
 	COMPARABLE
+	redefine
+		out
+	end
 
 create
 	make
@@ -39,6 +42,21 @@ feature
 	is_less alias "<" (other: like Current): BOOLEAN
 		do
 			Result := id < other.id
+		end
+
+	out: STRING
+		do
+			create Result.make_empty
+			Result.append (id.out)
+			Result.append ("->[")
+			Result.append (name)
+			Result.append (",")
+			Result.append (type.out)
+			Result.append (",")
+			Result.append (low.out)
+			Result.append (",")
+			Result.append (high.out)
+			Result.append ("]")
 		end
 
 end

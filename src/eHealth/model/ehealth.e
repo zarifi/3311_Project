@@ -127,6 +127,8 @@ feature -- queries
 				Result.append (m.item.out)
 				Result.append ("%N")
 			end
+			Result.append ("Interactions:%N")
+			Result.append (print_interactions)
 			Result.append ("Prescriptions:%N")
 			across prescriptions as pr
 			loop
@@ -174,6 +176,59 @@ feature -- queries
 					found_flag := True
 				end
 				patients.forth
+			end
+		end
+
+		print_interactions: STRING
+		local
+			med1: MEDICATION
+			med2: MEDICATION
+		do
+			create Result.make_empty
+			across interactions.current_keys as key
+			loop
+				med1 := get_medication_by_id (interactions[key.item])
+				med2 := get_medication_by_id (key.item)
+				if med1.name < med2.name then
+					Result.append ("[")
+					Result.append (med1.name)
+					Result.append (",")
+					Result.append (med1.type.out)
+					Result.append (",")
+					Result.append (med1.id.out)
+					Result.append ("]->[")
+					Result.append (med2.name)
+					Result.append (",")
+					Result.append (med2.type.out)
+					Result.append (",")
+					Result.append (med2.id.out)
+					Result.append ("]%N")
+				else
+					Result.append ("[")
+					Result.append (med2.name)
+					Result.append (",")
+					Result.append (med2.type.out)
+					Result.append (",")
+					Result.append (med2.id.out)
+					Result.append ("]->[")
+					Result.append (med1.name)
+					Result.append (",")
+					Result.append (med1.type.out)
+					Result.append (",")
+					Result.append (med1.id.out)
+					Result.append ("]%N")
+				end
+			end
+		end
+
+		get_medication_by_id(id: INTEGER): MEDICATION
+		do
+			create Result.make_empty
+			across medications as meds
+			loop
+				if meds.item.id = id then
+					Result := meds.item
+				end
 			end
 		end
 

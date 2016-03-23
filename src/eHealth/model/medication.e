@@ -13,7 +13,8 @@ inherit
 	end
 
 create
-	make
+	make,
+	make_empty
 
 feature {NONE}
 
@@ -24,6 +25,15 @@ feature {NONE}
 			type := a_type
 			low := a_low
 			high := a_high
+		end
+
+	make_empty
+		do
+			id := -1
+			create name.make_empty
+			create type.make_pill
+			create low.default_create
+			create high.default_create
 		end
 
 feature -- attributes
@@ -42,6 +52,11 @@ feature
 	is_less alias "<" (other: like Current): BOOLEAN
 		do
 			Result := id < other.id
+		end
+
+	is_empty: BOOLEAN
+		do
+			Result := id = -1 and name.is_empty
 		end
 
 	out: STRING

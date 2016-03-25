@@ -27,6 +27,7 @@ feature {NONE} -- Initialization
 			create {SORTED_TWO_WAY_LIST[MEDICATION]}medications.make
 			create {SORTED_TWO_WAY_LIST[PRESCRIPTION]}prescriptions.make
 			create interactions.make(10)
+			create status_message.make_ok
 		end
 
 feature -- model attributes
@@ -37,8 +38,14 @@ feature -- model attributes
 	medications: LIST[MEDICATION]
 	prescriptions: LIST[PRESCRIPTION]
 	interactions: HASH_TABLE[INTEGER, INTEGER]
+	status_message: STATUS_MESSAGE
 
 feature -- model operations
+	set_status_message(new_message: STATUS_MESSAGE)
+		do
+			status_message := new_message
+		end
+
 	default_update
 			-- Perform update to the model state.
 		do
@@ -52,12 +59,20 @@ feature -- model operations
 		end
 
 	add_patient(id: INTEGER_64 ; name: STRING)
+		require
+			id_unique: across patients as p all p.item.id /= id end
+			valid_name: status_message.is_valid_name (name)
 		do
 			patients.extend (create {PATIENT}.make_patient(id.as_integer_32, name))
+		ensure
+			patient_inserted: across patients as p some p.item.id = id and p.item.name = name end
+			only_1_inserted: patients.count = old patients.count + 1
 		end
 
 	add_physician(id: INTEGER_64 ; name: STRING ; kind: INTEGER_64)
 		require
+			id_unique: across physicians as p all p.item.id /= id end
+			valid_name: status_message.is_valid_name (name)
 			valid_kind: kind = 3 or kind = 4
 		local
 			l_person_type: PERSON_TYPE
@@ -109,29 +124,37 @@ feature -- queries
 --			Result.append ("(")
 --			Result.append (i.out)
 --			Result.append (")")
-			Result.append ("Physicians:%N")
+			Result.append (i.out)
+			Result.append (": ")
+			Result.append (status_message.out)
+			Result.append ("%N")
+			Result.append ("  Physicians:%N")
 			across physicians as p
 			loop
+				Result.append ("    ")
 				Result.append(p.item.out)
 				Result.append ("%N")
 			end
-			Result.append ("Patients:%N")
+			Result.append ("  Patients:%N")
 			across patients as p
 			loop
+				Result.append ("    ")
 				Result.append(p.item.out)
 				Result.append ("%N")
 			end
-			Result.append ("Medications:%N")
+			Result.append ("  Medications:%N")
 			across medications as m
 			loop
+				Result.append ("    ")
 				Result.append (m.item.out)
 				Result.append ("%N")
 			end
-			Result.append ("Interactions:%N")
+			Result.append ("  Interactions:%N")
 			Result.append (print_interactions)
-			Result.append ("Prescriptions:%N")
+			Result.append ("  Prescriptions:%N")
 			across prescriptions as pr
 			loop
+				Result.append ("    ")
 				Result.append(pr.item.out)
 				Result.append ("%N")
 			end
@@ -187,6 +210,7 @@ feature -- queries
 			create Result.make_empty
 			across interactions.current_keys as key
 			loop
+				Result.append ("    ")
 				med1 := get_medication_by_id (interactions[key.item])
 				med2 := get_medication_by_id (key.item)
 				if med1.name < med2.name then

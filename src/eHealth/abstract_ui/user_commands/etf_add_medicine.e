@@ -17,6 +17,7 @@ feature -- command
 			add_medicine_precond(id, medicine, dose)
     	do
 			-- perform some update on the model state
+			model.default_update
 			model.add_medicine (id, medicine, dose)
 			etf_cmd_container.on_change.notify ([Current])
     	end

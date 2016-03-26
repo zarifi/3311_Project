@@ -67,7 +67,7 @@ feature
 				Result.append (meds.item.out)
 				med_count := med_count + 1
 			end
-			Result.append (") ]")
+			Result.append (")]")
 		end
 
 end

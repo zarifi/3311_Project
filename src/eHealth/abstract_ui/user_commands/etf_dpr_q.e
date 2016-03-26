@@ -6,16 +6,17 @@ note
 
 class
 	ETF_DPR_Q
-inherit 
+inherit
 	ETF_DPR_Q_INTERFACE
 		redefine dpr_q end
 create
 	make
-feature -- command 
+feature -- command
 	dpr_q
     	do
 			-- perform some update on the model state
 			model.default_update
+			model.dpr_q
 			etf_cmd_container.on_change.notify ([Current])
     	end
 

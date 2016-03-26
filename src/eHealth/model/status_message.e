@@ -15,7 +15,7 @@ inherit
 		end
 
 create
-	make_ok, make_name_start, make_patient_id_taken, make_physician_id_taken
+	make_ok, make_name_start, make_patient_id_taken, make_physician_id_taken, make_medication_name_taken, make_interaction_exists
 
 feature {NONE} -- Initialization
 
@@ -39,6 +39,16 @@ feature {NONE} -- Initialization
 			err_code := err_physician_id_taken
 		end
 
+	make_medication_name_taken
+		do
+			err_code := err_medication_name_taken
+		end
+
+	make_interaction_exists
+		do
+			err_code := err_interaction_exists
+		end
+
 feature -- Output
 
 	out: STRING
@@ -58,8 +68,8 @@ feature {NONE} -- Implementation
 			Result.put ("name must start with a letter", 2)
 			Result.put ("patient id already in use", 3)
 			Result.put ("physician id already in use", 4)
-			Result.put ("button already taken", 6)
-			Result.put ("there is a winner", 7)
+			Result.put ("medication name already in use", 5)
+			Result.put ("interaction already exists", 6)
 			Result.put ("finish this game first", 8)
 			Result.put ("game is finished", 9)
 			Result.put ("game ended in a tie", 10)
@@ -72,6 +82,10 @@ feature {NONE} -- Implementation
 	err_patient_id_taken: INTEGER = 3
 
 	err_physician_id_taken: INTEGER = 4
+
+	err_medication_name_taken: INTEGER = 5
+
+	err_interaction_exists: INTEGER = 6
 
 	valid_message (a_message_no: INTEGER): BOOLEAN
 		do

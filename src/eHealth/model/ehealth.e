@@ -28,6 +28,7 @@ feature {NONE} -- Initialization
 			create {SORTED_TWO_WAY_LIST[PRESCRIPTION]}prescriptions.make
 			create interactions.make(10)
 			create status_message.make_ok
+			create string_output.make_empty
 		end
 
 feature -- model attributes
@@ -39,6 +40,18 @@ feature -- model attributes
 	prescriptions: LIST[PRESCRIPTION]
 	interactions: HASH_TABLE[INTEGER, INTEGER]
 	status_message: STATUS_MESSAGE
+	string_output: STRING
+
+feature -- Different string output
+	is_output_set: BOOLEAN
+		do
+			Result := not string_output.is_empty
+		end
+
+	clear_output_string
+		do
+			create string_output.make_empty
+		end
 
 feature -- model operations
 	set_status_message(new_message: STATUS_MESSAGE)
@@ -83,7 +96,9 @@ feature -- model operations
 
 	add_medication(id: INTEGER_64 ; medicine: TUPLE[name: STRING; kind: INTEGER_64; low: VALUE; hi: VALUE])
 		require
+			medication_name_not_taken: across medications as meds all meds.item.name /~ medicine.name end
 			valid_kind: medicine.kind = 1 or medicine.kind = 2
+			valid_range: True
 		local
 			l_type: MEDICATION_TYPE
 		do
@@ -92,6 +107,10 @@ feature -- model operations
 		end
 
 	add_interaction(id1: INTEGER_64 ; id2: INTEGER_64)
+		require
+			interaction_is_unique: across interactions.current_keys as key all
+									not((key.item = id1.as_integer_32 and interactions[key.item] = id2.as_integer_32) or
+									(key.item = id2.as_integer_32 and interactions[key.item] = id1.as_integer_32)) end
 		do
 			interactions.force (id1.as_integer_32, id2.as_integer_32)
 		end
@@ -116,47 +135,154 @@ feature -- model operations
 			end
 		end
 
+	prescriptions_q(medication_id: INTEGER_64)
+		local
+			medication: MEDICATION
+			sorted_patients: LIST[PERSON]
+		do
+			string_output := ""
+			create {SORTED_TWO_WAY_LIST[PERSON]}sorted_patients.make
+			medication := get_medication_by_id (medication_id.as_integer_32)
+			string_output.append ("  Output: medication is ")
+			string_output.append (medication.name)
+			across prescriptions as pres
+			loop
+				across pres.item.medicines as med
+				loop
+					if med.item.medication.id = medication_id then
+						sorted_patients.extend (pres.item.patient)
+					end
+				end
+			end
+			if sorted_patients.count > 0 then
+				across sorted_patients as patient
+				loop
+					string_output.append("%N")
+					string_output.append ("    ")
+					string_output.append(patient.item.id.out)
+					string_output.append("->")
+					string_output.append(patient.item.name)
+				end
+			end
+		end
+
+	dpr_q
+		local
+			found: 	BOOLEAN
+			found_any: BOOLEAN
+			l_i: INTEGER
+			j: INTEGER
+		do
+			string_output := ""
+			found_any := False
+			across prescriptions as pres
+			loop
+				from
+					l_i := 1
+					found := false
+				until
+					l_i > pres.item.medicines.count - 1
+				loop
+					from
+						j := l_i + 1
+					until
+						j > pres.item.medicines.count
+					loop
+						if ((interactions.has (pres.item.medicines[l_i].medication.id) and
+						interactions[pres.item.medicines[l_i].medication.id] = pres.item.medicines[j].medication.id)) or
+						((interactions.has (pres.item.medicines[j].medication.id) and
+						interactions[pres.item.medicines[j].medication.id] = pres.item.medicines[l_i].medication.id)) then
+							if not found_any then
+								string_output.append ("  There are dangerous prescriptions:")
+								found_any := True
+							end
+							if not found then
+								string_output.append("%N")
+								string_output.append ("    (")
+								string_output.append (pres.item.patient.name)
+								string_output.append (",")
+								string_output.append (pres.item.patient.id.out)
+								string_output.append (")->{ ")
+								found := True
+							else
+								string_output.append (", ")
+							end
+							if interactions.has (pres.item.medicines[l_i].medication.id) then
+								string_output.append (printable_interaction (pres.item.medicines[l_i].medication.id))
+							else
+								string_output.append (printable_interaction (pres.item.medicines[j].medication.id))
+							end
+						end
+						j := j + 1
+					end
+					l_i := l_i + 1
+				end
+				if found then
+					string_output.append (" }")
+				end
+			end
+			if not is_output_set then
+				string_output.append ("  There are no dangerous prescriptions")
+			end
+		end
+
+		remove_medicine(id: INTEGER_64 ; medicine: INTEGER_64)
+			do
+				across prescriptions as pres
+				loop
+					if pres.item.id = id then
+						across pres.item.medicines as med
+						loop
+							if med.item.medication.id = medicine then
+								pres.item.medicines.remove
+							end
+						end
+					end
+				end
+			end
+
 feature -- queries
 	out : STRING
 		do
 			create Result.make_from_string ("  ")
---			Result.append ("System State: default model state ")
---			Result.append ("(")
---			Result.append (i.out)
---			Result.append (")")
 			Result.append (i.out)
 			Result.append (": ")
 			Result.append (status_message.out)
 			Result.append ("%N")
-			Result.append ("  Physicians:%N")
-			across physicians as p
-			loop
-				Result.append ("    ")
-				Result.append(p.item.out)
-				Result.append ("%N")
-			end
-			Result.append ("  Patients:%N")
-			across patients as p
-			loop
-				Result.append ("    ")
-				Result.append(p.item.out)
-				Result.append ("%N")
-			end
-			Result.append ("  Medications:%N")
-			across medications as m
-			loop
-				Result.append ("    ")
-				Result.append (m.item.out)
-				Result.append ("%N")
-			end
-			Result.append ("  Interactions:%N")
-			Result.append (print_interactions)
-			Result.append ("  Prescriptions:%N")
-			across prescriptions as pr
-			loop
-				Result.append ("    ")
-				Result.append(pr.item.out)
-				Result.append ("%N")
+			if is_output_set then
+				Result.append(string_output)
+				clear_output_string
+			else
+				Result.append ("  Physicians:%N")
+				across physicians as p
+				loop
+					Result.append ("    ")
+					Result.append(p.item.out)
+					Result.append ("%N")
+				end
+				Result.append ("  Patients: %N")
+				across patients as p
+				loop
+					Result.append ("    ")
+					Result.append(p.item.out)
+					Result.append ("%N")
+				end
+				Result.append ("  Medications: %N")
+				across medications as m
+				loop
+					Result.append ("    ")
+					Result.append (m.item.out)
+					Result.append ("%N")
+				end
+				Result.append ("  Interactions: %N")
+				Result.append (print_interactions)
+				Result.append ("  Prescriptions:")
+				across prescriptions as pr
+				loop
+					Result.append ("%N")
+					Result.append ("    ")
+					Result.append(pr.item.out)
+				end
 			end
 		end
 
@@ -202,46 +328,55 @@ feature -- queries
 			end
 		end
 
+		printable_interaction(key: INTEGER): STRING
+			local
+				med1: MEDICATION
+				med2: MEDICATION
+			do
+				create Result.make_empty
+				if interactions.has (key) then
+					med1 := get_medication_by_id (interactions[key])
+					med2 := get_medication_by_id (key)
+					if med1.name < med2.name then
+						Result.append ("[")
+						Result.append (med1.name)
+						Result.append (",")
+						Result.append (med1.type.out)
+						Result.append (",")
+						Result.append (med1.id.out)
+						Result.append ("]->[")
+						Result.append (med2.name)
+						Result.append (",")
+						Result.append (med2.type.out)
+						Result.append (",")
+						Result.append (med2.id.out)
+						Result.append ("]")
+					else
+						Result.append ("[")
+						Result.append (med2.name)
+						Result.append (",")
+						Result.append (med2.type.out)
+						Result.append (",")
+						Result.append (med2.id.out)
+						Result.append ("]->[")
+						Result.append (med1.name)
+						Result.append (",")
+						Result.append (med1.type.out)
+						Result.append (",")
+						Result.append (med1.id.out)
+						Result.append ("]")
+					end
+				end
+			end
+
 		print_interactions: STRING
-		local
-			med1: MEDICATION
-			med2: MEDICATION
 		do
 			create Result.make_empty
 			across interactions.current_keys as key
 			loop
 				Result.append ("    ")
-				med1 := get_medication_by_id (interactions[key.item])
-				med2 := get_medication_by_id (key.item)
-				if med1.name < med2.name then
-					Result.append ("[")
-					Result.append (med1.name)
-					Result.append (",")
-					Result.append (med1.type.out)
-					Result.append (",")
-					Result.append (med1.id.out)
-					Result.append ("]->[")
-					Result.append (med2.name)
-					Result.append (",")
-					Result.append (med2.type.out)
-					Result.append (",")
-					Result.append (med2.id.out)
-					Result.append ("]%N")
-				else
-					Result.append ("[")
-					Result.append (med2.name)
-					Result.append (",")
-					Result.append (med2.type.out)
-					Result.append (",")
-					Result.append (med2.id.out)
-					Result.append ("]->[")
-					Result.append (med1.name)
-					Result.append (",")
-					Result.append (med1.type.out)
-					Result.append (",")
-					Result.append (med1.id.out)
-					Result.append ("]%N")
-				end
+				Result.append (printable_interaction(key.item))
+				Result.append ("%N")
 			end
 		end
 

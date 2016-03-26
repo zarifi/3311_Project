@@ -17,6 +17,7 @@ feature -- command
 			new_prescription_precond(id, doctor, patient)
     	do
 			-- perform some update on the model state
+			model.default_update
 			model.new_prescription (id, doctor, patient)
 			etf_cmd_container.on_change.notify ([Current])
     	end

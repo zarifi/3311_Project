@@ -21,10 +21,19 @@ feature -- command
     		create sm.make_ok
 			-- perform some update on the model state
 			model.default_update
-			if across model.interactions.current_keys as key some
+			if id1 <0 or id2 < 0 then
+				create sm.make_positive_medication_ids
+				model.set_status_message (sm)
+			elseif id1 = id2 then
+				create sm.make_unique_medication_ids
+				model.set_status_message (sm)
+			elseif across model.medications as meds all meds.item.id /= id1 end or across model.medications as meds all meds.item.id /= id2 end then
+				create sm.make_registered_medications
+				model.set_status_message (sm)
+			elseif across model.interactions.current_keys as key some
 									(key.item = id1.as_integer_32 and model.interactions[key.item] = id2.as_integer_32) or
 									(key.item = id2.as_integer_32 and model.interactions[key.item] = id1.as_integer_32) end then
-				create sm.make_interaction_exists
+				create sm.make_unique_interaction
 				model.set_status_message (sm)
 			else
 				model.set_status_message (sm)

@@ -21,11 +21,14 @@ feature -- command
     		create sm.make_ok
 			-- perform some update on the model state
 			model.default_update
-			if across model.patients as p some p.item.id = id.as_integer_32 end then
-				create sm.make_patient_id_taken
+			if id <= 0 then
+				create sm.make_patient_positive_id
+				model.set_status_message (sm)
+			elseif across model.patients as p some p.item.id = id.as_integer_32 end then
+				create sm.make_patient_valid_id
 				model.set_status_message (sm)
 			elseif not sm.is_valid_name (name) then
-				create sm.make_name_start
+				create sm.make_patient_valid_name_start
 				model.set_status_message (sm)
 			else
 				model.set_status_message (sm)

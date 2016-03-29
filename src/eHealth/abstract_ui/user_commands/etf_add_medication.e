@@ -21,11 +21,20 @@ feature -- command
     		create sm.make_ok
 			-- perform some update on the model state
 			model.default_update
-			if not sm.is_valid_name (medicine.name) then
-				create sm.make_name_start
+			if id <= 0 then
+				create sm.make_medication_positive_id
+				model.set_status_message (sm)
+			elseif across model.medications as med some med.item.id = id end then
+				create sm.make_medication_valid_id
+				model.set_status_message (sm)
+			elseif not sm.is_valid_name (medicine.name) then
+				create sm.make_medication_valid_name_start
 				model.set_status_message (sm)
 			elseif across model.medications as med some med.item.name ~ medicine.name end then
-				create sm.make_medication_name_taken
+				create sm.make_medication_name_exists
+				model.set_status_message (sm)
+			elseif medicine.low < create {VALUE}.make_from_int (0) or medicine.hi < medicine.low then
+				create sm.make_valid_dose
 				model.set_status_message (sm)
 			else
 				model.set_status_message (sm)

@@ -73,6 +73,7 @@ feature -- model operations
 
 	add_patient(id: INTEGER_64 ; name: STRING)
 		require
+			positive_id: id > 0
 			id_unique: across patients as p all p.item.id /= id end
 			valid_name: status_message.is_valid_name (name)
 		do
@@ -84,9 +85,9 @@ feature -- model operations
 
 	add_physician(id: INTEGER_64 ; name: STRING ; kind: INTEGER_64)
 		require
+			positive_id: id > 0
 			id_unique: across physicians as p all p.item.id /= id end
 			valid_name: status_message.is_valid_name (name)
-			valid_kind: kind = 3 or kind = 4
 		local
 			l_person_type: PERSON_TYPE
 		do
@@ -96,9 +97,11 @@ feature -- model operations
 
 	add_medication(id: INTEGER_64 ; medicine: TUPLE[name: STRING; kind: INTEGER_64; low: VALUE; hi: VALUE])
 		require
+			positive_id: id > 0
+			id_unique: across medications as meds all meds.item.id /= id end
+			valid_medication_name: status_message.is_valid_name (medicine.name)
 			medication_name_not_taken: across medications as meds all meds.item.name /~ medicine.name end
-			valid_kind: medicine.kind = 1 or medicine.kind = 2
-			valid_range: True
+			valid_range: medicine.low > create {VALUE}.make_from_int (0) and medicine.hi >= medicine.low
 		local
 			l_type: MEDICATION_TYPE
 		do
@@ -108,6 +111,9 @@ feature -- model operations
 
 	add_interaction(id1: INTEGER_64 ; id2: INTEGER_64)
 		require
+			positive_ids: id1 > 0 and id2 > 0
+			different_ids: id1 /= id2
+			medication_ids_registered: across medications as meds some meds.item.id = id1 end and across medications as meds some meds.item.id = id2 end
 			interaction_is_unique: across interactions.current_keys as key all
 									not((key.item = id1.as_integer_32 and interactions[key.item] = id2.as_integer_32) or
 									(key.item = id2.as_integer_32 and interactions[key.item] = id1.as_integer_32)) end
@@ -172,26 +178,50 @@ feature -- model operations
 			found_any: BOOLEAN
 			l_i: INTEGER
 			j: INTEGER
+			pres_patients: HASH_TABLE[INTEGER, INTEGER]
+			med_presc: HASH_TABLE[LIST[MEDICINE], INTEGER]
+			l_med_list: LIST[MEDICINE]
 		do
 			string_output := ""
 			found_any := False
+
+			create pres_patients.make (10)
+			create med_presc.make (10)
 			across prescriptions as pres
 			loop
+				if pres_patients.has (pres.item.patient.id) then
+					if attached med_presc[pres_patients[pres.item.patient.id]] as list then
+						list.append (pres.item.medicines)
+					end
+				else
+					pres_patients.extend (pres.item.id, pres.item.patient.id)
+					med_presc.put (pres.item.medicines.deep_twin, pres.item.id)
+				end
+			end
+
+			across prescriptions as pres
+			loop
+				create {ARRAYED_LIST[MEDICINE]}l_med_list.make (1)
+				if med_presc.has (pres.item.id) then
+					if attached med_presc[pres.item.id] as m1 then
+						l_med_list := m1
+					end
+
 				from
 					l_i := 1
 					found := false
 				until
-					l_i > pres.item.medicines.count - 1
+					l_i > l_med_list.count - 1
 				loop
 					from
 						j := l_i + 1
 					until
-						j > pres.item.medicines.count
+						j > l_med_list.count
 					loop
-						if ((interactions.has (pres.item.medicines[l_i].medication.id) and
-						interactions[pres.item.medicines[l_i].medication.id] = pres.item.medicines[j].medication.id)) or
-						((interactions.has (pres.item.medicines[j].medication.id) and
-						interactions[pres.item.medicines[j].medication.id] = pres.item.medicines[l_i].medication.id)) then
+						if ((interactions.has (l_med_list[l_i].medication.id) and
+						interactions[l_med_list[l_i].medication.id] = l_med_list[j].medication.id)) or
+						((interactions.has (l_med_list[j].medication.id) and
+						interactions[l_med_list[j].medication.id] = l_med_list[l_i].medication.id)) then
 							if not found_any then
 								string_output.append ("  There are dangerous prescriptions:")
 								found_any := True
@@ -207,10 +237,10 @@ feature -- model operations
 							else
 								string_output.append (", ")
 							end
-							if interactions.has (pres.item.medicines[l_i].medication.id) then
-								string_output.append (printable_interaction (pres.item.medicines[l_i].medication.id))
+							if interactions.has (l_med_list[l_i].medication.id) then
+								string_output.append (printable_interaction (l_med_list[l_i].medication.id))
 							else
-								string_output.append (printable_interaction (pres.item.medicines[j].medication.id))
+								string_output.append (printable_interaction (l_med_list[j].medication.id))
 							end
 						end
 						j := j + 1
@@ -219,6 +249,7 @@ feature -- model operations
 				end
 				if found then
 					string_output.append (" }")
+				end
 				end
 			end
 			if not is_output_set then

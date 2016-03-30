@@ -12,7 +12,8 @@ redefine
 	out
 end
 create
-	make
+	make,
+	make_empty
 
 feature {NONE}
 
@@ -21,6 +22,14 @@ feature {NONE}
 			id := a_id
 			physician := a_physician
 			patient := a_patient
+			create {SORTED_TWO_WAY_LIST[MEDICINE]}medicines.make
+		end
+
+	make_empty
+		do
+			id := -1
+			create {PHYSICIAN}physician.make_empty
+			create {PATIENT}patient.make_empty
 			create {SORTED_TWO_WAY_LIST[MEDICINE]}medicines.make
 		end
 

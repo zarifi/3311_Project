@@ -196,7 +196,7 @@ feature {NONE} -- Implementation
 
 	err_message: ARRAY[STRING]
 		once
-			create Result.make_filled ("", 1, 10)
+			create Result.make_filled ("", 1, 28)
 			Result.put("ok",1)
 			Result.put ("physician id must be a positive integer",2)
 			Result.put ("physician id already in use",3)

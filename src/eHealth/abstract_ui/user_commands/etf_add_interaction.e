@@ -35,6 +35,9 @@ feature -- command
 									(key.item = id2.as_integer_32 and model.interactions[key.item] = id1.as_integer_32) end then
 				create sm.make_unique_interaction
 				model.set_status_message (sm)
+			elseif not model.check_valid_interaction (id1.as_integer_32, id2.as_integer_32) then
+				create sm.make_remove_conflict
+				model.set_status_message (sm)
 			else
 				model.set_status_message (sm)
 				model.add_interaction (id1, id2)

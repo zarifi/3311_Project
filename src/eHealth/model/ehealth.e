@@ -117,16 +117,33 @@ feature -- model operations
 			interaction_is_unique: across interactions.current_keys as key all
 									not((key.item = id1.as_integer_32 and interactions[key.item] = id2.as_integer_32) or
 									(key.item = id2.as_integer_32 and interactions[key.item] = id1.as_integer_32)) end
+			valid_interaction: check_valid_interaction(id1.as_integer_32, id2.as_integer_32)
 		do
 			interactions.force (id1.as_integer_32, id2.as_integer_32)
 		end
 
 	new_prescription(id: INTEGER_64 ; doctor: INTEGER_64 ; patient: INTEGER_64)
+		require
+			positive_id: id > 0
+			id_unique: across prescriptions as pres all pres.item.id /= id.as_integer_32 end
+			physician_id_positive: doctor > 0
+			physician_registered: across physicians as phy some phy.item.id = doctor.as_integer_32 end
+			patient_id_positive: patient > 0
+			patient_registered: across patients as pat some pat.item.id = patient.as_integer_32 end
+			prescription_not_assigned: across prescriptions as pres all pres.item.physician.id /= doctor.as_integer_32 or pres.item.patient.id /= patient.as_integer_32 end
 		do
 			prescriptions.extend(create {PRESCRIPTION}.make (id.as_integer_32, get_physician_by_id (doctor.as_integer_32), get_patient_by_id (patient.as_integer_32)))
 		end
 
 	add_medicine(id: INTEGER_64 ; medicine: INTEGER_64 ; dose: VALUE)
+		require
+			positive_id: id > 0
+			prescription_exists: across prescriptions as pres some pres.item.id = id end
+			positive_medication_id: medicine > 0
+			medication_registered: across medications as meds some meds.item.id = medicine end
+			medication_not_prescribed: across get_prescription_by_id(id.as_integer_32).medicines as meds all meds.item.medication.id /= medicine end
+			specialist_adds_dangerous: check_if_interaction_by_specialist(id.as_integer_32, medicine.as_integer_32)
+			dose_in_range: get_medication_by_id(medicine.as_integer_32).high >= dose and get_medication_by_id(medicine.as_integer_32).low <= dose
 		do
 			across prescriptions as presc
 			loop
@@ -142,6 +159,9 @@ feature -- model operations
 		end
 
 	prescriptions_q(medication_id: INTEGER_64)
+		require
+			positive_id: medication_id > 0
+			medication_registered: across medications as med some med.item.id = medication_id end
 		local
 			medication: MEDICATION
 			sorted_patients: LIST[PERSON]
@@ -258,6 +278,12 @@ feature -- model operations
 		end
 
 		remove_medicine(id: INTEGER_64 ; medicine: INTEGER_64)
+			require
+				positive_prescription_id: id > 0
+				prescription_exists: across prescriptions as pres some pres.item.id = id end
+				positive_medication_id: medicine > 0
+				medication_registered: across medications as meds some meds.item.id = medicine end
+				medication_in_prescription: across get_prescription_by_id(id.as_integer_32).medicines as meds some meds.item.medication.id = medicine end
 			do
 				across prescriptions as pres
 				loop
@@ -338,7 +364,7 @@ feature -- queries
 			end
 		end
 
-		get_patient_by_id(a_id: INTEGER): PERSON
+	get_patient_by_id(a_id: INTEGER): PERSON
 		require
 			patient_exists: True
 		local
@@ -420,6 +446,116 @@ feature -- queries
 					Result := meds.item
 				end
 			end
+		end
+
+		get_prescription_by_id(id: INTEGER): PRESCRIPTION
+			do
+				create Result.make_empty
+				across prescriptions as pres
+				loop
+					if pres.item.id = id then
+						Result := pres.item
+					end
+				end
+			end
+
+feature -- contracts
+
+	check_if_interaction_by_specialist(prescription_id, medication_id: INTEGER): BOOLEAN
+		local
+			j: INTEGER
+			pres_patients: HASH_TABLE[INTEGER, INTEGER]
+			med_presc: HASH_TABLE[LIST[MEDICINE], INTEGER]
+			l_med_list: LIST[MEDICINE]
+			prescription: PRESCRIPTION
+		do
+			prescription := get_prescription_by_id(prescription_id)
+			if prescription.physician.type.int_type = (create {PHYSICIAN_TYPE}.make_specialist).int_type then
+				Result := True
+			else
+				create pres_patients.make (10)
+				create med_presc.make (10)
+				across prescriptions as pres
+				loop
+					if pres_patients.has (pres.item.patient.id) then
+						if attached med_presc[pres_patients[pres.item.patient.id]] as list then
+							list.append (pres.item.medicines)
+						end
+					else
+						pres_patients.extend (pres.item.id, pres.item.patient.id)
+						med_presc.put (pres.item.medicines.deep_twin, pres.item.id)
+					end
+				end
+				Result := True
+				across prescriptions as pres
+				loop
+					if pres.item.id = prescription_id then
+						create {ARRAYED_LIST[MEDICINE]}l_med_list.make (0)
+						if attached med_presc[pres_patients[pres.item.patient.id]] as m1 then
+							l_med_list := m1
+						end
+						across l_med_list as med
+						loop
+							if (interactions.has (med.item.medication.id) and interactions[med.item.medication.id] = medication_id) or
+							(interactions.has (medication_id) and interactions[medication_id] = med.item.medication.id) then
+								Result := False
+							end
+						end
+					end
+				end
+			end
+
+
+		end
+
+	check_valid_interaction(id1, id2: INTEGER): BOOLEAN
+		local
+			j: INTEGER
+			k: INTEGER
+			pres_patients: HASH_TABLE[INTEGER, INTEGER]
+			med_presc: HASH_TABLE[LIST[MEDICINE], INTEGER]
+		do
+			create pres_patients.make (10)
+			create med_presc.make (10)
+			across prescriptions as pres
+			loop
+				if pres.item.physician.type.int_type = (create {PHYSICIAN_TYPE}.make_generalist).int_type then
+
+						if pres_patients.has (pres.item.patient.id) then
+							if attached med_presc[pres_patients[pres.item.patient.id]] as list then
+								list.append (pres.item.medicines)
+							end
+						else
+							pres_patients.extend (pres.item.id, pres.item.patient.id)
+							med_presc.put (pres.item.medicines.deep_twin, pres.item.id)
+						end
+
+				end
+			end
+
+			Result := True
+
+			across med_presc.current_keys as key
+			loop
+				if attached med_presc[key.item] as list then
+					from
+						j := 1
+					until
+						j > list.count - 1 or not Result
+					loop
+						from
+							k := j + 1
+						until
+							k > list.count or not Result
+						loop
+							if (list[j].medication.id = id1 and list[k].medication.id = id2) or (list[k].medication.id = id1 and list[j].medication.id = id2) then
+								Result := False
+							end
+						end
+					end
+				end
+			end
+
 		end
 
 invariant

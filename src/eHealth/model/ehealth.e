@@ -140,7 +140,6 @@ feature -- model operations
 		ensure
 			interaction_inserted: (interactions.has (id1.as_integer_32) and interactions [id1.as_integer_32] = id2) or (interactions.has (id2.as_integer_32) and interactions [id2.as_integer_32] = id1)
 			only_1_way_added: interactions.has (id1.as_integer_32) and interactions [id1.as_integer_32] = id2 implies not (interactions.has (id2.as_integer_32) and interactions [id2.as_integer_32] = id1)
-			added_once: interactions.count = old interactions.count + 1
 		end
 
 	new_prescription (id: INTEGER_64; doctor: INTEGER_64; patient: INTEGER_64)

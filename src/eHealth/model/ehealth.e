@@ -28,7 +28,7 @@ feature {NONE} -- Initialization
 			create {SORTED_TWO_WAY_LIST [PERSON]} patients.make
 			create {SORTED_TWO_WAY_LIST [MEDICATION]} medications.make
 			create {SORTED_TWO_WAY_LIST [PRESCRIPTION]} prescriptions.make
-			create interactions.make (10)
+			create {ARRAYED_LIST[INTERACTION]}interactions.make (10)
 			create status_message.make_ok
 			create string_output.make_empty
 		end
@@ -47,7 +47,7 @@ feature -- model attributes
 
 	prescriptions: LIST [PRESCRIPTION]
 
-	interactions: HASH_TABLE [INTEGER, INTEGER]
+	interactions: LIST[INTERACTION]
 
 	status_message: STATUS_MESSAGE
 
@@ -133,13 +133,15 @@ feature -- model operations
 			positive_ids: id1 > 0 and id2 > 0
 			different_ids: id1 /= id2
 			medication_ids_registered: across medications as meds some meds.item.id = id1 end and across medications as meds some meds.item.id = id2 end
-			interaction_is_unique: across interactions.current_keys as key all not ((key.item = id1.as_integer_32 and interactions [key.item] = id2.as_integer_32) or (key.item = id2.as_integer_32 and interactions [key.item] = id1.as_integer_32)) end
+			interaction_is_unique: across interactions as key all not ((key.item.id1 = id1 and key.item.id2 = id2) or (key.item.id1 = id2 and key.item.id2 = id1)) end
 			valid_interaction: check_valid_interaction (id1.as_integer_32, id2.as_integer_32)
 		do
-			interactions.force (id1.as_integer_32, id2.as_integer_32)
+			interactions.extend (create {INTERACTION}.make (id1.as_integer_32, id2.as_integer_32))
 		ensure
-			interaction_inserted: (interactions.has (id1.as_integer_32) and interactions [id1.as_integer_32] = id2) or (interactions.has (id2.as_integer_32) and interactions [id2.as_integer_32] = id1)
-			only_1_way_added: interactions.has (id1.as_integer_32) and interactions [id1.as_integer_32] = id2 implies not (interactions.has (id2.as_integer_32) and interactions [id2.as_integer_32] = id1)
+			interaction_inserted: across interactions as interact some (interact.item.id1 = id1 and interact.item.id2 = id2) or (interact.item.id2 = id1 and interact.item.id1 = id2) end
+			only_1_way_added: across interactions as inter some inter.item.id1 = id1 and inter.item.id2 = id2 implies across interactions as int all int.item.id1 /= id2 or int.item.id2 /= id1 end end
+			only_1_inserted: interactions.count = old interactions.count + 1
+
 		end
 
 	new_prescription (id: INTEGER_64; doctor: INTEGER_64; patient: INTEGER_64)
@@ -164,7 +166,7 @@ feature -- model operations
 			prescription_exists: across prescriptions as pres some pres.item.id = id end
 			positive_medication_id: medicine > 0
 			medication_registered: across medications as meds some meds.item.id = medicine end
-			medication_not_prescribed: across get_prescription_by_id (id.as_integer_32).medicines as meds all meds.item.medication.id /= medicine end
+			medication_not_prescribed: across get_medicines_for_patient (get_prescription_by_id (id.as_integer_32).patient.id) as meds all meds.item.medication.id /= medicine end
 			specialist_adds_dangerous: check_if_interaction_by_specialist (id.as_integer_32, medicine.as_integer_32)
 			dose_in_range: get_medication_by_id (medicine.as_integer_32).high >= dose and get_medication_by_id (medicine.as_integer_32).low <= dose
 		do
@@ -268,7 +270,7 @@ feature -- model operations
 						until
 							j > l_med_list.count
 						loop
-							if ((interactions.has (l_med_list [l_i].medication.id) and interactions [l_med_list [l_i].medication.id] = l_med_list [j].medication.id)) or ((interactions.has (l_med_list [j].medication.id) and interactions [l_med_list [j].medication.id] = l_med_list [l_i].medication.id)) then
+							if interactions_has (l_med_list [l_i].medication.id, l_med_list [j].medication.id) then
 								if not found_any then
 									string_output.append ("  There are dangerous prescriptions:")
 									found_any := True
@@ -284,11 +286,10 @@ feature -- model operations
 								else
 									string_output.append (", ")
 								end
-								if interactions.has (l_med_list [l_i].medication.id) then
-									string_output.append (printable_interaction (l_med_list [l_i].medication.id))
-								else
-									string_output.append (printable_interaction (l_med_list [j].medication.id))
-								end
+
+									string_output.append (printable_interaction (l_med_list [l_i].medication.id, l_med_list [j].medication.id))
+
+
 							end
 							j := j + 1
 						end
@@ -331,6 +332,49 @@ feature -- model operations
 		end
 
 feature -- queries
+
+	get_medicines_for_patient(patient_id: INTEGER): LIST[MEDICINE]
+		local
+			med_patients: HASH_TABLE [LIST [MEDICINE], INTEGER]
+		do
+			create {ARRAYED_LIST[MEDICINE]}Result.make (0)
+			create med_patients.make (10)
+			across
+				prescriptions as pres
+			loop
+				if med_patients.has (pres.item.patient.id) then
+					if attached med_patients [pres.item.patient.id] as list then
+						list.append (pres.item.medicines.deep_twin)
+					end
+				else
+					med_patients.put (pres.item.medicines.deep_twin, pres.item.patient.id)
+				end
+			end
+			if attached med_patients[patient_id] as med_list then
+				Result := med_list
+			end
+		end
+
+	interactions_has(id1, id2: INTEGER): BOOLEAN
+		do
+			across interactions as inter
+			loop
+				if (inter.item.id1 = id1 and inter.item.id2 = id2) or (inter.item.id1 = id2 and inter.item.id2 = id1) then
+					Result := True
+				end
+			end
+		end
+
+	interaction_by_ids(id1, id2: INTEGER): INTERACTION
+		do
+			create Result.make_empty
+			across interactions as inter
+			loop
+				if inter.item.id1 = id1 and inter.item.id2 = id2 then
+					Result := inter.item
+				end
+			end
+		end
 
 	sort_by_name (list: LIST [PERSON])
 		local
@@ -453,15 +497,15 @@ feature -- queries
 			correct_result: Result.id = a_id
 		end
 
-	printable_interaction (key: INTEGER): STRING
+	printable_interaction (id1, id2: INTEGER): STRING
 		local
 			med1: MEDICATION
 			med2: MEDICATION
 		do
 			create Result.make_empty
-			if interactions.has (key) then
-				med1 := get_medication_by_id (interactions [key])
-				med2 := get_medication_by_id (key)
+			if interactions_has (id1, id2) then
+				med1 := get_medication_by_id (id1)
+				med2 := get_medication_by_id (id2)
 				if med1.name < med2.name then
 					Result.append ("[")
 					Result.append (med1.name)
@@ -498,10 +542,10 @@ feature -- queries
 		do
 			create Result.make_empty
 			across
-				interactions.current_keys as key
+				interactions as inter
 			loop
 				Result.append ("    ")
-				Result.append (printable_interaction (key.item))
+				Result.append (printable_interaction (inter.item.id1, inter.item.id2))
 				Result.append ("%N")
 			end
 		end
@@ -574,7 +618,7 @@ feature -- contracts
 						across
 							l_med_list as med
 						loop
-							if (interactions.has (med.item.medication.id) and interactions [med.item.medication.id] = medication_id) or (interactions.has (medication_id) and interactions [medication_id] = med.item.medication.id) then
+							if interactions_has(medication_id, med.item.medication.id) then
 								Result := False
 							end
 						end

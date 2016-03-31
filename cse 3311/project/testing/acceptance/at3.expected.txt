@@ -1,0 +1,1013 @@
+  0: ok
+  Physicians:
+  Patients: 
+  Medications: 
+  Interactions: 
+  Prescriptions:
+->add_physician(1,"Hippocrates",generalist)
+  1: ok
+  Physicians:
+    1->[Hippocrates,gn]
+  Patients: 
+  Medications: 
+  Interactions: 
+  Prescriptions:
+->add_physician(5,"Arastoo",generalist)
+  2: ok
+  Physicians:
+    1->[Hippocrates,gn]
+    5->[Arastoo,gn]
+  Patients: 
+  Medications: 
+  Interactions: 
+  Prescriptions:
+->add_physician(3,"Mayo",specialist)
+  3: ok
+  Physicians:
+    1->[Hippocrates,gn]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+  Medications: 
+  Interactions: 
+  Prescriptions:
+->add_physician(2,"Galen",specialist)
+  4: ok
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+  Medications: 
+  Interactions: 
+  Prescriptions:
+->add_patient(3,"Dora")
+  5: ok
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+    3->Dora
+  Medications: 
+  Interactions: 
+  Prescriptions:
+->add_patient(1,"Phineas")
+  6: ok
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+    1->Phineas
+    3->Dora
+  Medications: 
+  Interactions: 
+  Prescriptions:
+->add_patient(2,"Henry")
+  7: ok
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+    1->Phineas
+    2->Henry
+    3->Dora
+  Medications: 
+  Interactions: 
+  Prescriptions:
+->add_medication(1,["Wafarin", pill, 1, 6])
+  8: ok
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+    1->Phineas
+    2->Henry
+    3->Dora
+  Medications: 
+    1->[Wafarin,pl,1.00,6.00]
+  Interactions: 
+  Prescriptions:
+->add_medication(2,["Sulfamethizole", pill, 200, 500])
+  9: ok
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+    1->Phineas
+    2->Henry
+    3->Dora
+  Medications: 
+    1->[Wafarin,pl,1.00,6.00]
+    2->[Sulfamethizole,pl,200.00,500.00]
+  Interactions: 
+  Prescriptions:
+->add_medication(4,["m4", liquid, 2.5, 9.5])
+  10: ok
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+    1->Phineas
+    2->Henry
+    3->Dora
+  Medications: 
+    1->[Wafarin,pl,1.00,6.00]
+    2->[Sulfamethizole,pl,200.00,500.00]
+    4->[m4,lq,2.50,9.50]
+  Interactions: 
+  Prescriptions:
+->add_medication(5,["m4", liquid, 10, 25.5])
+  11: medication name already in use
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+    1->Phineas
+    2->Henry
+    3->Dora
+  Medications: 
+    1->[Wafarin,pl,1.00,6.00]
+    2->[Sulfamethizole,pl,200.00,500.00]
+    4->[m4,lq,2.50,9.50]
+  Interactions: 
+  Prescriptions:
+->add_medication(5,["m5", liquid, 7, 16])
+  12: ok
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+    1->Phineas
+    2->Henry
+    3->Dora
+  Medications: 
+    1->[Wafarin,pl,1.00,6.00]
+    2->[Sulfamethizole,pl,200.00,500.00]
+    4->[m4,lq,2.50,9.50]
+    5->[m5,lq,7.00,16.00]
+  Interactions: 
+  Prescriptions:
+->add_medication(3,["m3", liquid, 10, 25.5])
+  13: ok
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+    1->Phineas
+    2->Henry
+    3->Dora
+  Medications: 
+    1->[Wafarin,pl,1.00,6.00]
+    2->[Sulfamethizole,pl,200.00,500.00]
+    3->[m3,lq,10.00,25.50]
+    4->[m4,lq,2.50,9.50]
+    5->[m5,lq,7.00,16.00]
+  Interactions: 
+  Prescriptions:
+->add_medication(6,["m6", pill, 2.9, 8.8])
+  14: ok
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+    1->Phineas
+    2->Henry
+    3->Dora
+  Medications: 
+    1->[Wafarin,pl,1.00,6.00]
+    2->[Sulfamethizole,pl,200.00,500.00]
+    3->[m3,lq,10.00,25.50]
+    4->[m4,lq,2.50,9.50]
+    5->[m5,lq,7.00,16.00]
+    6->[m6,pl,2.90,8.80]
+  Interactions: 
+  Prescriptions:
+->add_medication(9,["Tynol", pill, 10.2, 10.9])
+  15: ok
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+    1->Phineas
+    2->Henry
+    3->Dora
+  Medications: 
+    1->[Wafarin,pl,1.00,6.00]
+    2->[Sulfamethizole,pl,200.00,500.00]
+    3->[m3,lq,10.00,25.50]
+    4->[m4,lq,2.50,9.50]
+    5->[m5,lq,7.00,16.00]
+    6->[m6,pl,2.90,8.80]
+    9->[Tynol,pl,10.20,10.90]
+  Interactions: 
+  Prescriptions:
+->add_interaction(-2,4)
+  16: medication ids must be positive integers
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+    1->Phineas
+    2->Henry
+    3->Dora
+  Medications: 
+    1->[Wafarin,pl,1.00,6.00]
+    2->[Sulfamethizole,pl,200.00,500.00]
+    3->[m3,lq,10.00,25.50]
+    4->[m4,lq,2.50,9.50]
+    5->[m5,lq,7.00,16.00]
+    6->[m6,pl,2.90,8.80]
+    9->[Tynol,pl,10.20,10.90]
+  Interactions: 
+  Prescriptions:
+->add_interaction(3,-3)
+  17: medication ids must be positive integers
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+    1->Phineas
+    2->Henry
+    3->Dora
+  Medications: 
+    1->[Wafarin,pl,1.00,6.00]
+    2->[Sulfamethizole,pl,200.00,500.00]
+    3->[m3,lq,10.00,25.50]
+    4->[m4,lq,2.50,9.50]
+    5->[m5,lq,7.00,16.00]
+    6->[m6,pl,2.90,8.80]
+    9->[Tynol,pl,10.20,10.90]
+  Interactions: 
+  Prescriptions:
+->add_interaction(1,1)
+  18: medication ids must be different
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+    1->Phineas
+    2->Henry
+    3->Dora
+  Medications: 
+    1->[Wafarin,pl,1.00,6.00]
+    2->[Sulfamethizole,pl,200.00,500.00]
+    3->[m3,lq,10.00,25.50]
+    4->[m4,lq,2.50,9.50]
+    5->[m5,lq,7.00,16.00]
+    6->[m6,pl,2.90,8.80]
+    9->[Tynol,pl,10.20,10.90]
+  Interactions: 
+  Prescriptions:
+->add_interaction(1,2)
+  19: ok
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+    1->Phineas
+    2->Henry
+    3->Dora
+  Medications: 
+    1->[Wafarin,pl,1.00,6.00]
+    2->[Sulfamethizole,pl,200.00,500.00]
+    3->[m3,lq,10.00,25.50]
+    4->[m4,lq,2.50,9.50]
+    5->[m5,lq,7.00,16.00]
+    6->[m6,pl,2.90,8.80]
+    9->[Tynol,pl,10.20,10.90]
+  Interactions: 
+    [Sulfamethizole,pl,2]->[Wafarin,pl,1]
+  Prescriptions:
+->add_interaction(2,1)
+  20: interaction already exists
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+    1->Phineas
+    2->Henry
+    3->Dora
+  Medications: 
+    1->[Wafarin,pl,1.00,6.00]
+    2->[Sulfamethizole,pl,200.00,500.00]
+    3->[m3,lq,10.00,25.50]
+    4->[m4,lq,2.50,9.50]
+    5->[m5,lq,7.00,16.00]
+    6->[m6,pl,2.90,8.80]
+    9->[Tynol,pl,10.20,10.90]
+  Interactions: 
+    [Sulfamethizole,pl,2]->[Wafarin,pl,1]
+  Prescriptions:
+->add_interaction(1,2)
+  21: interaction already exists
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+    1->Phineas
+    2->Henry
+    3->Dora
+  Medications: 
+    1->[Wafarin,pl,1.00,6.00]
+    2->[Sulfamethizole,pl,200.00,500.00]
+    3->[m3,lq,10.00,25.50]
+    4->[m4,lq,2.50,9.50]
+    5->[m5,lq,7.00,16.00]
+    6->[m6,pl,2.90,8.80]
+    9->[Tynol,pl,10.20,10.90]
+  Interactions: 
+    [Sulfamethizole,pl,2]->[Wafarin,pl,1]
+  Prescriptions:
+->add_interaction(5,3)
+  22: ok
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+    1->Phineas
+    2->Henry
+    3->Dora
+  Medications: 
+    1->[Wafarin,pl,1.00,6.00]
+    2->[Sulfamethizole,pl,200.00,500.00]
+    3->[m3,lq,10.00,25.50]
+    4->[m4,lq,2.50,9.50]
+    5->[m5,lq,7.00,16.00]
+    6->[m6,pl,2.90,8.80]
+    9->[Tynol,pl,10.20,10.90]
+  Interactions: 
+    [Sulfamethizole,pl,2]->[Wafarin,pl,1]
+    [m3,lq,3]->[m5,lq,5]
+  Prescriptions:
+->add_interaction(5,6)
+  23: ok
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+    1->Phineas
+    2->Henry
+    3->Dora
+  Medications: 
+    1->[Wafarin,pl,1.00,6.00]
+    2->[Sulfamethizole,pl,200.00,500.00]
+    3->[m3,lq,10.00,25.50]
+    4->[m4,lq,2.50,9.50]
+    5->[m5,lq,7.00,16.00]
+    6->[m6,pl,2.90,8.80]
+    9->[Tynol,pl,10.20,10.90]
+  Interactions: 
+    [Sulfamethizole,pl,2]->[Wafarin,pl,1]
+    [m3,lq,3]->[m5,lq,5]
+    [m5,lq,5]->[m6,pl,6]
+  Prescriptions:
+->add_interaction(1,2)
+  24: interaction already exists
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+    1->Phineas
+    2->Henry
+    3->Dora
+  Medications: 
+    1->[Wafarin,pl,1.00,6.00]
+    2->[Sulfamethizole,pl,200.00,500.00]
+    3->[m3,lq,10.00,25.50]
+    4->[m4,lq,2.50,9.50]
+    5->[m5,lq,7.00,16.00]
+    6->[m6,pl,2.90,8.80]
+    9->[Tynol,pl,10.20,10.90]
+  Interactions: 
+    [Sulfamethizole,pl,2]->[Wafarin,pl,1]
+    [m3,lq,3]->[m5,lq,5]
+    [m5,lq,5]->[m6,pl,6]
+  Prescriptions:
+->add_interaction(1,6)
+  25: ok
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+    1->Phineas
+    2->Henry
+    3->Dora
+  Medications: 
+    1->[Wafarin,pl,1.00,6.00]
+    2->[Sulfamethizole,pl,200.00,500.00]
+    3->[m3,lq,10.00,25.50]
+    4->[m4,lq,2.50,9.50]
+    5->[m5,lq,7.00,16.00]
+    6->[m6,pl,2.90,8.80]
+    9->[Tynol,pl,10.20,10.90]
+  Interactions: 
+    [Sulfamethizole,pl,2]->[Wafarin,pl,1]
+    [m3,lq,3]->[m5,lq,5]
+    [m5,lq,5]->[m6,pl,6]
+    [Wafarin,pl,1]->[m6,pl,6]
+  Prescriptions:
+->add_interaction(1,9)
+  26: ok
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+    1->Phineas
+    2->Henry
+    3->Dora
+  Medications: 
+    1->[Wafarin,pl,1.00,6.00]
+    2->[Sulfamethizole,pl,200.00,500.00]
+    3->[m3,lq,10.00,25.50]
+    4->[m4,lq,2.50,9.50]
+    5->[m5,lq,7.00,16.00]
+    6->[m6,pl,2.90,8.80]
+    9->[Tynol,pl,10.20,10.90]
+  Interactions: 
+    [Sulfamethizole,pl,2]->[Wafarin,pl,1]
+    [m3,lq,3]->[m5,lq,5]
+    [m5,lq,5]->[m6,pl,6]
+    [Wafarin,pl,1]->[m6,pl,6]
+    [Tynol,pl,9]->[Wafarin,pl,1]
+  Prescriptions:
+->add_interaction(9,6)
+  27: ok
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+    1->Phineas
+    2->Henry
+    3->Dora
+  Medications: 
+    1->[Wafarin,pl,1.00,6.00]
+    2->[Sulfamethizole,pl,200.00,500.00]
+    3->[m3,lq,10.00,25.50]
+    4->[m4,lq,2.50,9.50]
+    5->[m5,lq,7.00,16.00]
+    6->[m6,pl,2.90,8.80]
+    9->[Tynol,pl,10.20,10.90]
+  Interactions: 
+    [Sulfamethizole,pl,2]->[Wafarin,pl,1]
+    [m3,lq,3]->[m5,lq,5]
+    [m5,lq,5]->[m6,pl,6]
+    [Wafarin,pl,1]->[m6,pl,6]
+    [Tynol,pl,9]->[Wafarin,pl,1]
+    [Tynol,pl,9]->[m6,pl,6]
+  Prescriptions:
+->new_prescription(1,2,3)
+  28: ok
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+    1->Phineas
+    2->Henry
+    3->Dora
+  Medications: 
+    1->[Wafarin,pl,1.00,6.00]
+    2->[Sulfamethizole,pl,200.00,500.00]
+    3->[m3,lq,10.00,25.50]
+    4->[m4,lq,2.50,9.50]
+    5->[m5,lq,7.00,16.00]
+    6->[m6,pl,2.90,8.80]
+    9->[Tynol,pl,10.20,10.90]
+  Interactions: 
+    [Sulfamethizole,pl,2]->[Wafarin,pl,1]
+    [m3,lq,3]->[m5,lq,5]
+    [m5,lq,5]->[m6,pl,6]
+    [Wafarin,pl,1]->[m6,pl,6]
+    [Tynol,pl,9]->[Wafarin,pl,1]
+    [Tynol,pl,9]->[m6,pl,6]
+  Prescriptions:
+    1->[1,2,3,()]
+->new_prescription(1,2,4)
+  29: prescription id already in use
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+    1->Phineas
+    2->Henry
+    3->Dora
+  Medications: 
+    1->[Wafarin,pl,1.00,6.00]
+    2->[Sulfamethizole,pl,200.00,500.00]
+    3->[m3,lq,10.00,25.50]
+    4->[m4,lq,2.50,9.50]
+    5->[m5,lq,7.00,16.00]
+    6->[m6,pl,2.90,8.80]
+    9->[Tynol,pl,10.20,10.90]
+  Interactions: 
+    [Sulfamethizole,pl,2]->[Wafarin,pl,1]
+    [m3,lq,3]->[m5,lq,5]
+    [m5,lq,5]->[m6,pl,6]
+    [Wafarin,pl,1]->[m6,pl,6]
+    [Tynol,pl,9]->[Wafarin,pl,1]
+    [Tynol,pl,9]->[m6,pl,6]
+  Prescriptions:
+    1->[1,2,3,()]
+->new_prescription(2,3,5)
+  30: patient with this id not registered
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+    1->Phineas
+    2->Henry
+    3->Dora
+  Medications: 
+    1->[Wafarin,pl,1.00,6.00]
+    2->[Sulfamethizole,pl,200.00,500.00]
+    3->[m3,lq,10.00,25.50]
+    4->[m4,lq,2.50,9.50]
+    5->[m5,lq,7.00,16.00]
+    6->[m6,pl,2.90,8.80]
+    9->[Tynol,pl,10.20,10.90]
+  Interactions: 
+    [Sulfamethizole,pl,2]->[Wafarin,pl,1]
+    [m3,lq,3]->[m5,lq,5]
+    [m5,lq,5]->[m6,pl,6]
+    [Wafarin,pl,1]->[m6,pl,6]
+    [Tynol,pl,9]->[Wafarin,pl,1]
+    [Tynol,pl,9]->[m6,pl,6]
+  Prescriptions:
+    1->[1,2,3,()]
+->new_prescription(3,3,3)
+  31: ok
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+    1->Phineas
+    2->Henry
+    3->Dora
+  Medications: 
+    1->[Wafarin,pl,1.00,6.00]
+    2->[Sulfamethizole,pl,200.00,500.00]
+    3->[m3,lq,10.00,25.50]
+    4->[m4,lq,2.50,9.50]
+    5->[m5,lq,7.00,16.00]
+    6->[m6,pl,2.90,8.80]
+    9->[Tynol,pl,10.20,10.90]
+  Interactions: 
+    [Sulfamethizole,pl,2]->[Wafarin,pl,1]
+    [m3,lq,3]->[m5,lq,5]
+    [m5,lq,5]->[m6,pl,6]
+    [Wafarin,pl,1]->[m6,pl,6]
+    [Tynol,pl,9]->[Wafarin,pl,1]
+    [Tynol,pl,9]->[m6,pl,6]
+  Prescriptions:
+    1->[1,2,3,()]
+    3->[3,3,3,()]
+->new_prescription(-2,2,6)
+  32: prescription id must be a positive integer
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+    1->Phineas
+    2->Henry
+    3->Dora
+  Medications: 
+    1->[Wafarin,pl,1.00,6.00]
+    2->[Sulfamethizole,pl,200.00,500.00]
+    3->[m3,lq,10.00,25.50]
+    4->[m4,lq,2.50,9.50]
+    5->[m5,lq,7.00,16.00]
+    6->[m6,pl,2.90,8.80]
+    9->[Tynol,pl,10.20,10.90]
+  Interactions: 
+    [Sulfamethizole,pl,2]->[Wafarin,pl,1]
+    [m3,lq,3]->[m5,lq,5]
+    [m5,lq,5]->[m6,pl,6]
+    [Wafarin,pl,1]->[m6,pl,6]
+    [Tynol,pl,9]->[Wafarin,pl,1]
+    [Tynol,pl,9]->[m6,pl,6]
+  Prescriptions:
+    1->[1,2,3,()]
+    3->[3,3,3,()]
+->new_prescription(1,4,4)
+  33: prescription id already in use
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+    1->Phineas
+    2->Henry
+    3->Dora
+  Medications: 
+    1->[Wafarin,pl,1.00,6.00]
+    2->[Sulfamethizole,pl,200.00,500.00]
+    3->[m3,lq,10.00,25.50]
+    4->[m4,lq,2.50,9.50]
+    5->[m5,lq,7.00,16.00]
+    6->[m6,pl,2.90,8.80]
+    9->[Tynol,pl,10.20,10.90]
+  Interactions: 
+    [Sulfamethizole,pl,2]->[Wafarin,pl,1]
+    [m3,lq,3]->[m5,lq,5]
+    [m5,lq,5]->[m6,pl,6]
+    [Wafarin,pl,1]->[m6,pl,6]
+    [Tynol,pl,9]->[Wafarin,pl,1]
+    [Tynol,pl,9]->[m6,pl,6]
+  Prescriptions:
+    1->[1,2,3,()]
+    3->[3,3,3,()]
+->new_prescription(6,-4,4)
+  34: physician id must be a positive integer
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+    1->Phineas
+    2->Henry
+    3->Dora
+  Medications: 
+    1->[Wafarin,pl,1.00,6.00]
+    2->[Sulfamethizole,pl,200.00,500.00]
+    3->[m3,lq,10.00,25.50]
+    4->[m4,lq,2.50,9.50]
+    5->[m5,lq,7.00,16.00]
+    6->[m6,pl,2.90,8.80]
+    9->[Tynol,pl,10.20,10.90]
+  Interactions: 
+    [Sulfamethizole,pl,2]->[Wafarin,pl,1]
+    [m3,lq,3]->[m5,lq,5]
+    [m5,lq,5]->[m6,pl,6]
+    [Wafarin,pl,1]->[m6,pl,6]
+    [Tynol,pl,9]->[Wafarin,pl,1]
+    [Tynol,pl,9]->[m6,pl,6]
+  Prescriptions:
+    1->[1,2,3,()]
+    3->[3,3,3,()]
+->new_prescription(8,10,9)
+  35: physician with this id not registered
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+    1->Phineas
+    2->Henry
+    3->Dora
+  Medications: 
+    1->[Wafarin,pl,1.00,6.00]
+    2->[Sulfamethizole,pl,200.00,500.00]
+    3->[m3,lq,10.00,25.50]
+    4->[m4,lq,2.50,9.50]
+    5->[m5,lq,7.00,16.00]
+    6->[m6,pl,2.90,8.80]
+    9->[Tynol,pl,10.20,10.90]
+  Interactions: 
+    [Sulfamethizole,pl,2]->[Wafarin,pl,1]
+    [m3,lq,3]->[m5,lq,5]
+    [m5,lq,5]->[m6,pl,6]
+    [Wafarin,pl,1]->[m6,pl,6]
+    [Tynol,pl,9]->[Wafarin,pl,1]
+    [Tynol,pl,9]->[m6,pl,6]
+  Prescriptions:
+    1->[1,2,3,()]
+    3->[3,3,3,()]
+->new_prescription(1,2,3)
+  36: prescription id already in use
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+    1->Phineas
+    2->Henry
+    3->Dora
+  Medications: 
+    1->[Wafarin,pl,1.00,6.00]
+    2->[Sulfamethizole,pl,200.00,500.00]
+    3->[m3,lq,10.00,25.50]
+    4->[m4,lq,2.50,9.50]
+    5->[m5,lq,7.00,16.00]
+    6->[m6,pl,2.90,8.80]
+    9->[Tynol,pl,10.20,10.90]
+  Interactions: 
+    [Sulfamethizole,pl,2]->[Wafarin,pl,1]
+    [m3,lq,3]->[m5,lq,5]
+    [m5,lq,5]->[m6,pl,6]
+    [Wafarin,pl,1]->[m6,pl,6]
+    [Tynol,pl,9]->[Wafarin,pl,1]
+    [Tynol,pl,9]->[m6,pl,6]
+  Prescriptions:
+    1->[1,2,3,()]
+    3->[3,3,3,()]
+->dpr_q
+  37: ok
+  There are no dangerous prescriptions
+->add_medicine(1,1,5.5)
+  38: ok
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+    1->Phineas
+    2->Henry
+    3->Dora
+  Medications: 
+    1->[Wafarin,pl,1.00,6.00]
+    2->[Sulfamethizole,pl,200.00,500.00]
+    3->[m3,lq,10.00,25.50]
+    4->[m4,lq,2.50,9.50]
+    5->[m5,lq,7.00,16.00]
+    6->[m6,pl,2.90,8.80]
+    9->[Tynol,pl,10.20,10.90]
+  Interactions: 
+    [Sulfamethizole,pl,2]->[Wafarin,pl,1]
+    [m3,lq,3]->[m5,lq,5]
+    [m5,lq,5]->[m6,pl,6]
+    [Wafarin,pl,1]->[m6,pl,6]
+    [Tynol,pl,9]->[Wafarin,pl,1]
+    [Tynol,pl,9]->[m6,pl,6]
+  Prescriptions:
+    1->[1,2,3,(1->5.50)]
+    3->[3,3,3,()]
+->add_medicine(1,2,300.5)
+  39: ok
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+    1->Phineas
+    2->Henry
+    3->Dora
+  Medications: 
+    1->[Wafarin,pl,1.00,6.00]
+    2->[Sulfamethizole,pl,200.00,500.00]
+    3->[m3,lq,10.00,25.50]
+    4->[m4,lq,2.50,9.50]
+    5->[m5,lq,7.00,16.00]
+    6->[m6,pl,2.90,8.80]
+    9->[Tynol,pl,10.20,10.90]
+  Interactions: 
+    [Sulfamethizole,pl,2]->[Wafarin,pl,1]
+    [m3,lq,3]->[m5,lq,5]
+    [m5,lq,5]->[m6,pl,6]
+    [Wafarin,pl,1]->[m6,pl,6]
+    [Tynol,pl,9]->[Wafarin,pl,1]
+    [Tynol,pl,9]->[m6,pl,6]
+  Prescriptions:
+    1->[1,2,3,(1->5.50,2->300.50)]
+    3->[3,3,3,()]
+->add_medicine(1,3,12.5)
+  40: ok
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+    1->Phineas
+    2->Henry
+    3->Dora
+  Medications: 
+    1->[Wafarin,pl,1.00,6.00]
+    2->[Sulfamethizole,pl,200.00,500.00]
+    3->[m3,lq,10.00,25.50]
+    4->[m4,lq,2.50,9.50]
+    5->[m5,lq,7.00,16.00]
+    6->[m6,pl,2.90,8.80]
+    9->[Tynol,pl,10.20,10.90]
+  Interactions: 
+    [Sulfamethizole,pl,2]->[Wafarin,pl,1]
+    [m3,lq,3]->[m5,lq,5]
+    [m5,lq,5]->[m6,pl,6]
+    [Wafarin,pl,1]->[m6,pl,6]
+    [Tynol,pl,9]->[Wafarin,pl,1]
+    [Tynol,pl,9]->[m6,pl,6]
+  Prescriptions:
+    1->[1,2,3,(1->5.50,2->300.50,3->12.50)]
+    3->[3,3,3,()]
+->dpr_q
+  41: ok
+  There are dangerous prescriptions:
+    (Dora,3)->{ [Sulfamethizole,pl,2]->[Wafarin,pl,1] }
+->new_prescription(3,2,1)
+  42: prescription id already in use
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+    1->Phineas
+    2->Henry
+    3->Dora
+  Medications: 
+    1->[Wafarin,pl,1.00,6.00]
+    2->[Sulfamethizole,pl,200.00,500.00]
+    3->[m3,lq,10.00,25.50]
+    4->[m4,lq,2.50,9.50]
+    5->[m5,lq,7.00,16.00]
+    6->[m6,pl,2.90,8.80]
+    9->[Tynol,pl,10.20,10.90]
+  Interactions: 
+    [Sulfamethizole,pl,2]->[Wafarin,pl,1]
+    [m3,lq,3]->[m5,lq,5]
+    [m5,lq,5]->[m6,pl,6]
+    [Wafarin,pl,1]->[m6,pl,6]
+    [Tynol,pl,9]->[Wafarin,pl,1]
+    [Tynol,pl,9]->[m6,pl,6]
+  Prescriptions:
+    1->[1,2,3,(1->5.50,2->300.50,3->12.50)]
+    3->[3,3,3,()]
+->add_medicine(3,2,300.5)
+  43: medication is already prescribed
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+    1->Phineas
+    2->Henry
+    3->Dora
+  Medications: 
+    1->[Wafarin,pl,1.00,6.00]
+    2->[Sulfamethizole,pl,200.00,500.00]
+    3->[m3,lq,10.00,25.50]
+    4->[m4,lq,2.50,9.50]
+    5->[m5,lq,7.00,16.00]
+    6->[m6,pl,2.90,8.80]
+    9->[Tynol,pl,10.20,10.90]
+  Interactions: 
+    [Sulfamethizole,pl,2]->[Wafarin,pl,1]
+    [m3,lq,3]->[m5,lq,5]
+    [m5,lq,5]->[m6,pl,6]
+    [Wafarin,pl,1]->[m6,pl,6]
+    [Tynol,pl,9]->[Wafarin,pl,1]
+    [Tynol,pl,9]->[m6,pl,6]
+  Prescriptions:
+    1->[1,2,3,(1->5.50,2->300.50,3->12.50)]
+    3->[3,3,3,()]
+->add_medicine(3,3,12.5)
+  44: medication is already prescribed
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+    1->Phineas
+    2->Henry
+    3->Dora
+  Medications: 
+    1->[Wafarin,pl,1.00,6.00]
+    2->[Sulfamethizole,pl,200.00,500.00]
+    3->[m3,lq,10.00,25.50]
+    4->[m4,lq,2.50,9.50]
+    5->[m5,lq,7.00,16.00]
+    6->[m6,pl,2.90,8.80]
+    9->[Tynol,pl,10.20,10.90]
+  Interactions: 
+    [Sulfamethizole,pl,2]->[Wafarin,pl,1]
+    [m3,lq,3]->[m5,lq,5]
+    [m5,lq,5]->[m6,pl,6]
+    [Wafarin,pl,1]->[m6,pl,6]
+    [Tynol,pl,9]->[Wafarin,pl,1]
+    [Tynol,pl,9]->[m6,pl,6]
+  Prescriptions:
+    1->[1,2,3,(1->5.50,2->300.50,3->12.50)]
+    3->[3,3,3,()]
+->add_medicine(3,5,12.5)
+  45: ok
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+    1->Phineas
+    2->Henry
+    3->Dora
+  Medications: 
+    1->[Wafarin,pl,1.00,6.00]
+    2->[Sulfamethizole,pl,200.00,500.00]
+    3->[m3,lq,10.00,25.50]
+    4->[m4,lq,2.50,9.50]
+    5->[m5,lq,7.00,16.00]
+    6->[m6,pl,2.90,8.80]
+    9->[Tynol,pl,10.20,10.90]
+  Interactions: 
+    [Sulfamethizole,pl,2]->[Wafarin,pl,1]
+    [m3,lq,3]->[m5,lq,5]
+    [m5,lq,5]->[m6,pl,6]
+    [Wafarin,pl,1]->[m6,pl,6]
+    [Tynol,pl,9]->[Wafarin,pl,1]
+    [Tynol,pl,9]->[m6,pl,6]
+  Prescriptions:
+    1->[1,2,3,(1->5.50,2->300.50,3->12.50)]
+    3->[3,3,3,(5->12.50)]
+->prescriptions_q(2)
+  46: ok
+  Output: medication is Sulfamethizole
+    3->Dora
+->dpr_q
+  47: ok
+  There are dangerous prescriptions:
+    (Dora,3)->{ [Sulfamethizole,pl,2]->[Wafarin,pl,1], [m3,lq,3]->[m5,lq,5] }
+->remove_medicine(3,5)
+  48: ok
+  Physicians:
+    1->[Hippocrates,gn]
+    2->[Galen,sp]
+    3->[Mayo,sp]
+    5->[Arastoo,gn]
+  Patients: 
+    1->Phineas
+    2->Henry
+    3->Dora
+  Medications: 
+    1->[Wafarin,pl,1.00,6.00]
+    2->[Sulfamethizole,pl,200.00,500.00]
+    3->[m3,lq,10.00,25.50]
+    4->[m4,lq,2.50,9.50]
+    5->[m5,lq,7.00,16.00]
+    6->[m6,pl,2.90,8.80]
+    9->[Tynol,pl,10.20,10.90]
+  Interactions: 
+    [Sulfamethizole,pl,2]->[Wafarin,pl,1]
+    [m3,lq,3]->[m5,lq,5]
+    [m5,lq,5]->[m6,pl,6]
+    [Wafarin,pl,1]->[m6,pl,6]
+    [Tynol,pl,9]->[Wafarin,pl,1]
+    [Tynol,pl,9]->[m6,pl,6]
+  Prescriptions:
+    1->[1,2,3,(1->5.50,2->300.50,3->12.50)]
+    3->[3,3,3,()]
+->dpr_q
+  49: ok
+  There are dangerous prescriptions:
+    (Dora,3)->{ [Sulfamethizole,pl,2]->[Wafarin,pl,1] }

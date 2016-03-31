@@ -30,9 +30,7 @@ feature -- command
 			elseif across model.medications as meds all meds.item.id /= id1 end or across model.medications as meds all meds.item.id /= id2 end then
 				create sm.make_registered_medications
 				model.set_status_message (sm)
-			elseif across model.interactions.current_keys as key some
-									(key.item = id1.as_integer_32 and model.interactions[key.item] = id2.as_integer_32) or
-									(key.item = id2.as_integer_32 and model.interactions[key.item] = id1.as_integer_32) end then
+			elseif across model.interactions as key some ((key.item.id1 = id1 and key.item.id2 = id2) or (key.item.id1 = id2 and key.item.id2 = id1)) end then
 				create sm.make_unique_interaction
 				model.set_status_message (sm)
 			elseif not model.check_valid_interaction (id1.as_integer_32, id2.as_integer_32) then

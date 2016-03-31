@@ -33,8 +33,8 @@ feature -- command
 			elseif across model.medications as meds all meds.item.id /= medicine end then
 				create sm.make_registered_medicine_id
 				model.set_status_message (sm)
-			elseif across model.get_prescription_by_id(id.as_integer_32).medicines as meds some meds.item.medication.id = medicine end then
-				create sm.make_registered_medicine_id
+			elseif across model.get_medicines_for_patient (model.get_prescription_by_id (id.as_integer_32).patient.id) as meds some meds.item.medication.id = medicine end then
+				create sm.make_prescribed_medicine
 				model.set_status_message (sm)
 			elseif not model.check_if_interaction_by_specialist(id.as_integer_32, medicine.as_integer_32) then
 				create sm.make_specialist_required

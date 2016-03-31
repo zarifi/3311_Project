@@ -33,7 +33,7 @@ feature -- command
 			elseif across model.medications as med some med.item.name ~ medicine.name end then
 				create sm.make_medication_name_exists
 				model.set_status_message (sm)
-			elseif medicine.low < create {VALUE}.make_from_int (0) or medicine.hi < medicine.low then
+			elseif medicine.low <= create {VALUE}.make_from_int (0) or medicine.hi < medicine.low then
 				create sm.make_valid_dose
 				model.set_status_message (sm)
 			else

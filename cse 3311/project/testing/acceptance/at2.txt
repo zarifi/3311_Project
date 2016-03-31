@@ -1,0 +1,95 @@
+-- at2.txt: Normal prescription followed by dangerous one
+add_physician	   (1, "Hippocrates", generalist)
+add_physician	   (-3, "Mayo", generalist)
+-- negative id
+add_physician	   (2, "Galen", specialist) 
+--  wrong type
+add_physician      (2,"2Sara", generalist) 
+-- name start with number duplicate id
+
+add_physician    (5,"Hossein", specialist)
+add_physician 	   (3, "Gayl", generalist)
+--add_physician     ("Gorge", 4, generalist) 
+-- arguments not in order 
+add_physician	   (2, "Galen", specialist)
+add_physician	   (10,"",specialist) 
+-- empty name
+add_physician	   (11.0, "Leo",generalist) 
+-- not int
+add_physician	   (11, "$haily", generalist) 
+-- name start with nonletter  
+
+add_patient        (-3, "Dora") 
+-- negative id
+add_patient        (1, "&Phineas") 
+-- start with non Letter
+add_patient        (1, "Henry") 
+add_patient		   (5, "phil")
+add_patient		   (2, "Joe")
+add_patient		   (2,"Jane") 
+-- already in use id
+add_patient 	   (6, "phil") 
+-- already in use names
+add_patient 	   (3, "saeed")
+--add_patient	   (99, "Ebi", "sia") 
+-- wrong number of arguments
+add_patient 	   (33, "") 
+-- empty name
+add_patient	       (3, "adel") 
+-- not int
+--add_patient 	   (3, "harry", "henry") 
+-- wrong number of arguments
+
+
+-- physicians and patients are displayed in id order
+
+
+--add_medication   (id: ID; name: NAME; kind: MEDICATION_TYPE; low: VALUE; hi: VALUE)
+add_medication     (1, ["Wafarin", pill, 1.0, 6.0])
+add_medication     (2, ["Sulfamethizole", pill, 200.0, 500.0]) 
+add_medication     (4, ["m4", liquid, 2.5, 9.5])
+-- medication with name m4 is already in
+add_medication     (5, ["m4", liquid, 10.0, 25.5])
+add_medication     (5, ["m5", liquid, 7.0, 16.0])
+add_medication     (3, ["m3", liquid, 10.0, 25.5])
+
+add_interaction    (1,2)
+-- the following will not add
+add_interaction    (2,1)
+add_interaction    (1,2)
+add_interaction    (5,3)
+--interactions are displayed alphabetically by name
+
+-- prescription id 1: generalist Galen prescribes for Dora
+new_prescription   (1, 2, 3)
+dpr_q
+
+-- add Wafarin 5.5 mg to prescription id 1
+add_medicine       (1, 1, 5.5)
+-- add Sulfamethizole 300.5 mg to prescription id 1
+add_medicine       (1, 2, 300.5)
+  -- Hippocrates is a generalist and this conflicts
+
+add_medicine       (1, 3, 12.5)
+dpr_q
+
+-- prescription id 3: Mayo prescribes for Phineas
+new_prescription   (3, 2, 1)
+-- add Sulfamethizole 310.5 mg to prescription id 3
+add_medicine       (3, 2, 300.5)
+
+add_medicine       (3, 3, 12.5)
+
+	-- Added by Simon
+add_medicine       (3, 5, 12.5)
+
+
+-- query which patients are taking Sulfamethizole?
+prescriptions_q(2)
+
+-- there should be a dpr, dangerous prescription report
+dpr_q
+
+remove_medicine(3,5)
+
+dpr_q

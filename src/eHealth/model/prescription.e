@@ -54,6 +54,15 @@ feature
 			medicines.extend (medicine)
 		end
 
+	is_empty: BOOLEAN
+		do
+			if id = -1 and physician.is_empty and patient.is_empty then
+				Result := True
+			else
+				Result := False
+			end
+		end
+
 	out: STRING
 		local
 			med_count: INTEGER
